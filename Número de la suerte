@@ -1,0 +1,85 @@
+#include <iostream>
+
+// Función para validar la fecha
+bool esFechaValida(int dia, int mes, int anio) {
+    if (mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+        return false; // Fecha no válida
+    }
+
+    if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+        return false; // Meses con 30 días
+    }
+
+    if (mes == 2) {
+        if ((anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0)) {
+            if (dia > 29) {
+                return false; // Año bisiesto
+            }
+        } else {
+            if (dia > 28) {
+                return false; // Año no bisiesto
+            }
+        }
+    }
+
+    return true; // Fecha válida
+}
+
+// Función para calcular el número de la suerte
+int calcularNumeroSuerte(int dia, int mes, int anio) {
+    int suma = 0;
+
+    while (anio > 0) {
+        suma += anio % 10;
+        anio /= 10;
+    }
+
+    while (mes > 0) {
+        suma += mes % 10;
+        mes /= 10;
+    }
+
+    while (dia > 0) {
+        suma += dia % 10;
+        dia /= 10;
+    }
+
+    while (suma >= 10) {
+        int temp = suma;
+        suma = 0;
+        while (temp > 0) {
+            suma += temp % 10;
+            temp /= 10;
+        }
+    }
+
+    return suma;
+}
+
+int main() {
+    int dia, mes, anio;
+
+    do {
+        std::cout << "Ingrese su fecha de nacimiento (DD MM AAAA): ";
+        std::cin >> dia >> mes >> anio;
+
+        if (esFechaValida(dia, mes, anio)) {
+            int numeroSuerte = calcularNumeroSuerte(dia, mes, anio);
+            std::cout << "Su número de la suerte es: " << numeroSuerte << "\n";
+        } else {
+            std::cout << "Fecha no válida. Inténtelo de nuevo.\n";
+        }
+
+        std::cout << "¿Desea ingresar otra fecha? (1 para sí, 0 para no): ";
+        int opcion;
+        std::cin >> opcion;
+
+        if (opcion != 1) {
+            std::cout << "¡Hasta luego!\n";
+            break;
+        }
+
+    } while (1);
+
+    return 0;
+}
